@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday Suar 🐷</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--bg1:#fff1f5;--bg2:#ffd9e6;--ink:#5a2a3c;--card:rgba(255,255,255,.8);--pink:#ff6f9f;--gold:#f6b93b;--gold2:#c98200;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#2b1526;--bg2:#3d1b34;--ink:#ffe6ef;--card:rgba(255,255,255,.12)}}
+:root[data-theme="dark"]{--bg1:#2b1526;--bg2:#3d1b34;--ink:#ffe6ef;--card:rgba(255,255,255,.12)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{font-family:'Quicksand',system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;overflow-x:hidden}
+.screen{display:none;min-height:100vh;padding:24px 18px 36px;max-width:480px;margin:0 auto;text-align:center;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.screen.on{display:flex;animation:in .5s}
+@keyframes in{from{opacity:0;transform:translateY(14px)}}
+h1{font-family:'Pacifico',cursive;font-weight:400;font-size:2.1rem;margin:0;color:var(--pink);line-height:1.2}
+h2{font-family:'Pacifico',cursive;font-weight:400;margin:0;color:var(--pink)}
+p{margin:0;line-height:1.5}
+.big{font-size:5rem;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(3deg)}}
+.card{background:var(--card);border-radius:22px;padding:16px;width:100%;box-shadow:0 6px 24px rgba(255,111,159,.25);backdrop-filter:blur(6px)}
+button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:13px 26px;color:#fff;background:linear-gradient(135deg,#ff8fb3,var(--pink));box-shadow:0 5px 0 #d44c7c;cursor:pointer}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #d44c7c}
+button.gold{background:linear-gradient(135deg,#ffd75e,var(--gold));box-shadow:0 5px 0 var(--gold2);color:#5b3a00}
+input{font:inherit;width:100%;padding:14px;border-radius:16px;border:2px dashed var(--pink);text-align:center;background:var(--card);color:var(--ink);font-size:1.1rem}
+.hint{font-size:.85rem;opacity:.75}
+.shake{animation:sh .4s}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+#stage{width:100%;height:320px;border-radius:22px;background:var(--card);overflow:hidden;box-shadow:0 6px 24px rgba(255,111,159,.25)}
+#stage canvas{display:block;touch-action:none}
+#stage.cutting{position:relative}
+#stage.cutting::after{
+  content:"🔪 Cake pe finger se swipe kar 👇";
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#d6336c;font-size:1rem;
+  background:rgba(255,255,255,.18);
+  pointer-events:none;border-radius:22px;
+  animation:hintPulse 1.5s infinite;text-align:center;padding:10px;
+}
+@keyframes hintPulse{50%{opacity:.4;transform:scale(1.04)}}
+#knife{position:fixed;left:50%;top:50%;font-size:4.5rem;pointer-events:none;z-index:15;display:none;transform:translate(-25%,-80%) rotate(-35deg);transition:transform .15s;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3))}
+#knife.press{transform:translate(-25%,-80%) rotate(10deg) scale(.95)}
+.pets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%}
+.pet{padding:8px 2px;background:var(--card);color:var(--ink);box-shadow:0 4px 12px rgba(255,111,159,.25);border-radius:18px;font-size:.78rem;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pet img{width:52px;height:52px;display:block}
+.pet.fed{opacity:.6}
+.gift{position:fixed;inset:0;background:rgba(40,10,30,.55);display:none;align-items:center;justify-content:center;z-index:20;padding:24px}
+.gift.on{display:flex}
+.gift .card{max-width:340px;background:linear-gradient(#fffbea,#ffeaa8);color:#5b3a00;border:3px solid var(--gold);animation:in .4s}
+.gift .e{font-size:4rem}
+.fall{position:fixed;top:-30px;font-size:1.6rem;z-index:30;pointer-events:none;animation:fa linear forwards}
+@keyframes fa{to{transform:translateY(110vh) rotate(360deg)}}
+.hide{display:none!important}
+
+/* 🌸 CUTE DECORATIONS */
+.cute-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.cute-bg span{position:absolute;top:100%;font-size:1.5rem;opacity:0;animation:floaty linear infinite;filter:drop-shadow(0 2px 4px rgba(255,111,159,.3))}
+@keyframes floaty{
+  0%{transform:translateY(0) rotate(0deg) scale(.7);opacity:0}
+  10%{opacity:.55}
+  90%{opacity:.55}
+  100%{transform:translateY(-120vh) rotate(360deg) scale(1.2);opacity:0}
+}
+.sparkle{position:fixed;font-size:1.1rem;pointer-events:none;z-index:6;animation:twk 1.6s ease-in-out infinite}
+@keyframes twk{0%,100%{transform:scale(1) rotate(0);opacity:.95}50%{transform:scale(1.55) rotate(25deg);opacity:.4}}
+.card{position:relative}
+.card::before,.card::after{font-size:1.1rem;opacity:.7;position:absolute;pointer-events:none}
+.card::before{content:"🌸";top:-9px;left:10px;transform:rotate(-20deg)}
+.card::after{content:"🌸";top:-9px;right:10px;transform:rotate(20deg) scaleX(-1)}
+h1,h2{text-shadow:0 2px 12px rgba(255,111,159,.35),0 0 22px rgba(255,183,215,.45)}
+.big{filter:drop-shadow(0 10px 16px rgba(255,111,159,.4))}
+.gift .card{position:relative;overflow:visible;box-shadow:0 12px 44px rgba(246,185,59,.55),0 0 0 5px rgba(255,255,255,.5)}
+.gift-ribbon{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:2.6rem;animation:bob 1.6s ease-in-out infinite}
+.gift-sparkles{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);letter-spacing:10px;font-size:1rem;animation:twk 1.8s infinite}
+.pet:not(.fed):active{animation:petpop .35s}
+@keyframes petpop{50%{transform:scale(.9) rotate(-3deg)}}
+.screen.on{position:relative;z-index:1}
+
+/* 🖼️ Cute image styles */
+.cute-img{display:block;margin:0 auto;filter:drop-shadow(0 8px 14px rgba(255,111,159,.45));animation:bob 2.4s ease-in-out infinite}
+.hero-img{width:130px;height:130px}
+.deco-img{width:70px;height:70px;position:absolute;pointer-events:none;opacity:.9;animation:bob 3s ease-in-out infinite}
+.img-row{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0}
+.img-row img{width:64px;height:64px;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(255,111,159,.4))}
+.img-row img:nth-child(2){animation-delay:.3s}
+.img-row img:nth-child(3){animation-delay:.6s}
+.img-row img:nth-child(4){animation-delay:.9s}
+.s4-img{width:80px;height:80px;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 12px rgba(255,111,159,.4))}
+.s4-img:nth-child(2){animation-delay:.3s}
+.s4-img:nth-child(3){animation-delay:.6s}
+.s4-img:nth-child(4){animation-delay:.9s}
+.s4-img:nth-child(5){animation-delay:1.2s}
+</style></head><body>
+
+<!-- 🌸 Floating cute background -->
+<div class="cute-bg" id="cuteBg"></div>
+
+<div id="knife">🔪</div>
+
+<section class="screen on" id="s1">
+  <img class="cute-img hero-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f437.svg" alt="pig" onerror="this.outerHTML='<div class=\'big\'>🐷</div>'">
+  <h1>Secret Treasure</h1>
+  <p>Ye khazana sirf ek special suar ke liye hai ✨</p>
+  <div class="card">
+    <input id="pw" type="text" placeholder="password daalo..." autocomplete="off" autocapitalize="none">
+    <p class="hint" style="margin-top:8px">💡 Hint: Main tujhe pyaar se kya bulata hu? 🐷</p>
+  </div>
+  <button id="open">Treasure open kar 🔑</button>
+</section>
+
+<section class="screen" id="s2">
+  <img class="cute-img hero-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f437.svg" alt="pig" onerror="this.outerHTML='<div class=\'big\'>🐷</div>'">
+  <h1>Happy Birthday,<br><span id="nm"></span>!</h1>
+  <div class="card"><p id="line"></p></div>
+  <div class="img-row">
+    <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f496.svg" alt="heart">
+    <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f389.svg" alt="party">
+    <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f381.svg" alt="gift">
+    <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f382.svg" alt="cake">
+  </div>
+  <p class="hint">Cake tera wait kar raha hai 🎂 Moombatti bujha, chaku utha aur apne haath se kaat!</p>
+  <button id="go">Virtual cake kaatne chal 🎂</button>
+</section>
+
+<section class="screen" id="s3">
+  <h2>Tera Cake 🎂</h2>
+  <p id="ct">Pehle moombatti bujha 🕯️</p>
+  <div id="stage"></div>
+  <p class="hint" id="mh">🎤 Mic allow kar, phir muh paas laake zor se phoonk maar!</p>
+  <button id="blow">Mic nahi chala? Yahan daba 💨</button>
+  <div class="pets hide" id="pets"></div>
+</section>
+
+<section class="screen" id="s4">
+  <img class="cute-img hero-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f389.svg" alt="party" onerror="this.outerHTML='<div class=\'big\'>🎉</div>'">
+  <h1>Party Khatam, Suarrrrrr....😋</h1>
+  <div class="card"><p id="end"></p></div>
+  <p>💝 Aur tune jo gifts jeete:</p>
+  <div class="card" id="loot" style="text-align:left"></div>
+  <div class="img-row">
+    <img class="s4-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f437.svg" alt="pig">
+    <img class="s4-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f496.svg" alt="heart">
+    <img class="s4-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f43c.svg" alt="panda">
+    <img class="s4-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f430.svg" alt="bunny">
+    <img class="s4-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f431.svg" alt="cat">
+  </div>
+  <p class="hint">Ye page hamesha yahin rahega — kabhi bhi kholkr dekh liyo😗</p>
+</section>
+
+<div class="gift" id="gift"><div class="card">
+  <div class="gift-ribbon">🎀</div>
+  <div class="e" id="ge"></div>
+  <h2 id="gt" style="color:#c98200"></h2>
+  <p id="gd" style="margin:8px 0 14px"></p>
+  <button class="gold" id="gk">Chal mann me thank you bol 😙💖</button>
+  <div class="gift-sparkles">✨ 💫 ✨</div>
+</div></div>
+
+<script>
+// ✏️ YAHAN APNA CUSTOMISE KARO
+const PASSWORD=["suar","suwar"];
+const NAME="Suar";
+const WELCOME="Duniya ki sabse cute, sabse pagal aur sabse pyaari behen ko janamdin mubarak. Tu meri favourite suar hai aur hamesha rahegi #komal.suar 🐷💖";
+const ENDMSG="Tu kitni bhi badi ho jaaye, Tu hamesha chhoti si suar rahegi. Tu cake nhi kaat skti isiliye ye choti si site banai hope tujhe pasand aaye😐. Hamesha khush reh, khaati reh, hasti reh. — Tera Bhai (Arya😐)";
+const PETS=[
+ {e:"🥳",n:"Jiju",img:"1f973",g:{e:"🍫",t:"Chocolate Party",d:"Jiju ki tarf se Ek badi si chocolate tere naam😋"}},
+ {e:"😋",n:"Mummaa",img:"1f469",g:{e:"🍦",t:"Ice-cream Treat",d:"Mumma ki taraf se ice-cream date😌"}},
+ {e:"😎",n:"Main (Arya)",img:"1f60e",g:{e:"🛍️",t:"Shopping Coupon",d:"Mere tarf se Ek shopping ka coupon, tujhe jo pasand aaye 😎"}},
+ {e:"👽",n:"Baaki friends",img:"1f465",g:{e:"👑",t:"Queen for a Day",d:"Ek din tu boss: koi taana nahi, koi ladai nahi 😂"}}
+];
+const $=id=>document.getElementById(id);
+let fed=0,loot=[],blowLvl=0,mic=null;
+function show(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$('s'+n).classList.add('on');window.scrollTo(0,0);if(n===3)size()}
+function rain(list,n){for(let i=0;i<n;i++){const s=document.createElement('span');s.className='fall';s.textContent=list[i%list.length];
+ s.style.left=Math.random()*95+'vw';s.style.animationDuration=(2+Math.random()*2.5)+'s';s.style.animationDelay=Math.random()*.8+'s';
+ document.body.appendChild(s);setTimeout(()=>s.remove(),5500)}}
+$('nm').textContent=NAME;$('line').textContent=WELCOME;$('end').textContent=ENDMSG;
+
+function tryOpen(){
+ const v=$('pw').value.trim().toLowerCase();
+ if(PASSWORD.some(p=>p===v)){rain(['💖','✨','🎀'],24);show(2)}
+ else{const i=$('pw');i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake');i.value='';i.placeholder='galat! phir try kar 😑'}
+}
+$('open').onclick=tryOpen;
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')tryOpen()});
+$('go').onclick=()=>{show(3);startMic()};
+
+/* ---------- 3D CAKE ---------- */
+const R=1.7,TOP=1.33;
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(38,1,.1,50);
+cam.position.set(0,5.2,5.4);cam.lookAt(0,.5,0);
+let ren;try{ren=new THREE.WebGLRenderer({antialias:true,alpha:true})}catch(e){alert('Is phone/browser me 3D (WebGL) nahi chal raha. Chrome me kholo 🙏');throw e}
+ren.setPixelRatio(Math.min(devicePixelRatio,2));
+$('stage').appendChild(ren.domElement);
+scene.add(new THREE.AmbientLight(0xffffff,.8));
+const dl=new THREE.DirectionalLight(0xffffff,.7);dl.position.set(3,6,4);scene.add(dl);
+function size(){const w=$('stage').clientWidth||340;ren.setSize(w,320);cam.aspect=w/320;cam.updateProjectionMatrix()}
+
+const plate=new THREE.Mesh(new THREE.CylinderGeometry(2.15,2.15,.12,48),new THREE.MeshLambertMaterial({color:0xffffff}));
+plate.position.y=-.06;scene.add(plate);
+
+function wedge(a0,a1,berries){
+ const g=new THREE.Group(),sh=new THREE.Shape();
+ sh.moveTo(0,0);sh.absarc(0,0,R,a0,a1,false);sh.lineTo(0,0);
+ [[0,.55,0xffb3c9],[.55,.1,0xfff4f8],[.65,.5,0xffb3c9],[1.15,.18,0xffffff]].forEach(([y,h,c])=>{
+  const geo=new THREE.ExtrudeGeometry(sh,{depth:h,bevelEnabled:false});geo.rotateX(-Math.PI/2);
+  const m=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({color:c}));m.position.y=y;g.add(m)});
+ berries.forEach(a=>{const b=new THREE.Mesh(new THREE.SphereGeometry(.14,12,12),new THREE.MeshLambertMaterial({color:0xff3b5c}));
+  b.position.set(Math.cos(a)*R*.72,TOP+.08,-Math.sin(a)*R*.72);g.add(b)});
+ scene.add(g);return g}
+const cake=wedge(0,2*Math.PI,[0,1,2,3,4,5].map(i=>i*Math.PI/3));
+
+const can=new THREE.Group(),fl=[];
+[[-.55,.1],[0,-.2],[.55,.1]].forEach(([x,z],i)=>{
+ const c=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.5,10),new THREE.MeshLambertMaterial({color:[0x7ad3ff,0xffd75e,0xb69cff][i]}));
+ c.position.set(x,TOP+.25,z);
+ const f=new THREE.Mesh(new THREE.SphereGeometry(.09,10,10),new THREE.MeshBasicMaterial({color:0xffc233}));
+ f.position.set(x,TOP+.58,z);can.add(c,f);fl.push(f)});
+scene.add(can);
+
+const ws=[];let t=0;
+(function loop(){requestAnimationFrame(loop);t+=.05;
+ fl.forEach((f,i)=>f.scale.set(1+Math.sin(t+i)*.12,(1.6+Math.sin(t*2+i)*.2)*(1-blowLvl*.5),1));
+ ws.forEach(w=>{
+  if(w.userData.eat){w.position.y+=.09;w.position.z+=.06;w.scale.multiplyScalar(.93);if(w.scale.x<.1){scene.remove(w);w.userData.eat=0}}
+  else if(w.userData.tg)w.position.lerp(w.userData.tg,.08)});
+ ren.render(scene,cam)})();
+
+/* ---------- KNIFE + CUTTING ---------- */
+const ray=new THREE.Raycaster(),pl=new THREE.Plane(new THREE.Vector3(0,1,0),-TOP),v2=new THREE.Vector2(),pt=new THREE.Vector3();
+function hit(e){const r=ren.domElement.getBoundingClientRect();
+ v2.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);
+ ray.setFromCamera(v2,cam);return ray.ray.intersectPlane(pl,pt)?pt.clone():null}
+let phase='idle',stroke=[],cuts=[],lines=[],dragging=false;
+const knife=$('knife'),cv=ren.domElement;
+const kmove=e=>{knife.style.left=e.clientX+'px';knife.style.top=e.clientY+'px'};
+
+function blowOut(){
+ if(phase!=='idle') return;
+ stopMic();
+ fl.forEach(f=>f.visible=false);
+ setTimeout(()=>scene.remove(can),500);
+ $('blow').classList.add('hide');
+ $('mh').classList.add('hide');
+ phase='cut';
+ rain(['✨','🎈'],14);
+ $('ct').innerHTML='<b>Wish maang li? 😎</b><br>Ab cake pe finger se swipe karo ✂️';
+ const r=$('stage').getBoundingClientRect();
+ knife.style.left=(r.left+r.width/2)+'px';
+ knife.style.top=(r.top+r.height/2)+'px';
+ knife.style.display='block';
+ $('stage').classList.add('cutting');
+ setTimeout(()=>{
+   if(phase==='cut'){
+     $('ct').innerHTML='<b>🔪 Upar se neeche finger chala cake pe</b><br>(swipe slowly)';
+   }
+ },3500);
+}
+$('blow').onclick=blowOut;
+
+cv.addEventListener('pointerdown',e=>{
+  if(phase!=='cut')return;
+  e.preventDefault();
+  try{cv.setPointerCapture(e.pointerId)}catch(err){}
+  dragging=true;
+  kmove(e);
+  knife.classList.add('press');
+  stroke=[];
+  const p=hit(e);
+  if(p)stroke.push(p);
+},{passive:false});
+
+cv.addEventListener('pointermove',e=>{
+  if(phase!=='cut'||!dragging)return;
+  e.preventDefault();
+  kmove(e);
+  const p=hit(e);
+  if(p&&Math.hypot(p.x,p.z)<R*1.3)stroke.push(p);
+},{passive:false});
+
+cv.addEventListener('pointerup',e=>{
+  if(phase!=='cut')return;
+  dragging=false;
+  knife.classList.remove('press');
+  if(stroke.length<3){$('ct').innerHTML='<b>Thoda slow swipe karo 🔪</b><br>Upar se neeche tak';return}
+  const a=stroke[0],b=stroke[stroke.length-1];
+  if(a.distanceTo(b)<1.6){$('ct').textContent='Poore cake pe se, lamba swipe maar 🔪';return}
+  let al=Math.atan2(-(b.z-a.z),b.x-a.x);al=((al%Math.PI)+Math.PI)%Math.PI;
+  if(cuts.length){const d=Math.abs(al-cuts[0]);if(Math.min(d,Math.PI-d)<.6){$('ct').textContent='Thoda tirchha kaat, alag direction me ✂️';return}}
+  cuts.push(al);
+  const ln=new THREE.Mesh(new THREE.BoxGeometry(R*2,.03,.05),new THREE.MeshBasicMaterial({color:0x8a4b5e}));
+  ln.position.y=TOP+.01;ln.rotation.y=al;scene.add(ln);lines.push(ln);
+  if(cuts.length===1)$('ct').textContent='Ek cut ho gaya! Ab doosra, tirchha kaat ✂️';
+  else finish();
+});
+
+function finish(){
+ phase='feed';lines.forEach(l=>scene.remove(l));scene.remove(cake);
+ $('stage').classList.remove('cutting');
+ const a1=cuts[0];let a2=cuts[1];if(a2<a1)a2+=Math.PI;
+ [[a1,a2],[a2,a1+Math.PI],[a1+Math.PI,a2+Math.PI],[a2+Math.PI,a1+2*Math.PI]].forEach(([s,e])=>{
+  const m=(s+e)/2,w=wedge(s,e,[m]);w.userData.tg=new THREE.Vector3(Math.cos(m)*.3,0,-Math.sin(m)*.3);ws.push(w)});
+ knife.style.display='none';rain(['🎉','🎊','💖','🍰'],30);
+ $('ct').textContent='Perfect, 4 slice! 🍰 Ab Sabko khila 😗';$('pets').classList.remove('hide')}
+
+/* ---------- MIC BLOW DETECTION (FIXED) ---------- */
+async function startMic(){
+ try{
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    throw new Error('MediaDevices not supported');
+  }
+  const st=await navigator.mediaDevices.getUserMedia({
+    audio:{
+      echoCancellation:false,
+      noiseSuppression:false,
+      autoGainControl:false
+    }
+  });
+  const AC=window.AudioContext||window.webkitAudioContext;
+  const ac=new AC();
+  await ac.resume();
+  const an=ac.createAnalyser();
+  an.fftSize=1024;
+  an.smoothingTimeConstant=0.3;
+  ac.createMediaStreamSource(st).connect(an);
+  const d=new Uint8Array(an.fftSize);
+  mic={st,ac};
+  let base=0.05,acc=0;
+  const t0=performance.now();
+  $('mh').textContent='🎤 Mic ON! Ab muh paas laake zor se phoonk maar 💨';
+
+  (function tick(){
+    if(!mic) return;
+    an.getByteTimeDomainData(d);
+    let s=0;
+    for(let i=0;i<d.length;i++){
+      const x=(d[i]-128)/128;
+      s+=x*x;
+    }
+    const r=Math.sqrt(s/d.length);
+
+    if(performance.now()-t0 < 1200){
+      base=Math.max(base,r);
+    } else {
+      const l=Math.max(0, r - base - 0.02);
+      blowLvl=Math.min(1, l*7);
+      if(l > 0.06){
+        acc++;
+        if(acc > 6) blowOut();
+      } else {
+        acc=Math.max(0, acc-1);
+      }
+    }
+    requestAnimationFrame(tick);
+  })();
+ }catch(e){
+  $('mh').textContent='Mic allow nahi hua 😅 Neeche button se bujha le';
+  $('blow').classList.remove('hide');
+ }
+}
+function stopMic(){if(mic){mic.st.getTracks().forEach(x=>x.stop());mic.ac.close();mic=null}blowLvl=0}
+
+/* ---------- FEEDING ---------- */
+PETS.forEach((p,i)=>{
+ const b=document.createElement('button');b.className='pet';
+ b.innerHTML=`<img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/${p.img}.svg" alt="${p.n}" onerror="this.outerHTML='<span style=\'font-size:2.1rem\'>${p.e}</span>'"><span>${p.n}</span>`;
+ b.onclick=()=>{
+  if(b.dataset.d||phase!=='feed')return;b.dataset.d=1;b.classList.add('fed');
+  const imgEl=b.querySelector('img');if(imgEl){imgEl.style.filter='grayscale(.4)';imgEl.style.opacity='.7'}
+  const spanEl=b.querySelector('span:last-child');if(spanEl)spanEl.textContent='😋 '+p.n;
+  ws[i].userData.eat=1;fed++;loot.push(p.g);
+  rain(['🍰','💖'],10);
+  $('ge').textContent=p.g.e;$('gt').textContent=p.g.t;$('gd').textContent=p.g.d;
+  setTimeout(()=>$('gift').classList.add('on'),600)};
+ $('pets').appendChild(b)});
+$('gk').onclick=()=>{$('gift').classList.remove('on');
+ if(fed===4)setTimeout(()=>{
+  $('loot').innerHTML=loot.map(g=>`<p style="margin:6px 0">${g.e} <b>${g.t}</b></p>`).join('');
+  show(4);rain(['🎉','🎂','💖','🐷'],36)},400)};
+
+/* ---------- 🌸 Cute floating background emojis ---------- */
+(function cuteBg(){
+  const box=$('cuteBg');
+  const EMO=['🌸','💖','✨','🎀','🐷','🍰','🧁','💕','⭐','🦋','🌈','🐰','🎈','💗'];
+  for(let i=0;i<22;i++){
+    const s=document.createElement('span');
+    s.textContent=EMO[i%EMO.length];
+    s.style.left=(Math.random()*96)+'vw';
+    s.style.animationDuration=(9+Math.random()*10)+'s';
+    s.style.animationDelay=(Math.random()*12)+'s';
+    s.style.fontSize=(1+Math.random()*.9)+'rem';
+    box.appendChild(s);
+  }
+})();
+
+/* ---------- 🌸 Random sparkles across screen ---------- */
+(function sparkles(){
+  setInterval(()=>{
+    const s=document.createElement('span');
+    s.className='sparkle';
+    s.textContent=['✨','💫','⭐','🌟'][Math.floor(Math.random()*4)];
+    s.style.left=(Math.random()*92+3)+'vw';
+    s.style.top=(Math.random()*85+5)+'vh';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1800);
+  },650);
+})();
+</script>
+</body></html>
